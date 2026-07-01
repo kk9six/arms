@@ -1,0 +1,35 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+*.log
+
+# Virtual environments
+.venv
+
+trash/
+*.mp4
+dataset/**
+!dataset/*.py
+!dataset/mean_std/
+!dataset/mean_std/**
+output/**
+!output/.gitkeep
+smpl/**
+!smpl/.gitkeep
+videos/** */
+
+*.ipynb
+sentencet5-xxl/
+
+Experiments/**
+experiments/**
+checkpoints/**
+
+wandb/**
+
+evaluation.sh
+notebook.py
