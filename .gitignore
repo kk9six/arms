@@ -11,7 +11,6 @@ wheels/
 .venv
 
 trash/
-*.mp4
 dataset/**
 !dataset/*.py
 !dataset/mean_std/
@@ -20,7 +19,6 @@ output/**
 !output/.gitkeep
 smpl/**
 !smpl/.gitkeep
-videos/** */
 
 *.ipynb
 sentencet5-xxl/
