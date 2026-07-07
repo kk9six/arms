@@ -1,0 +1,825 @@
+<!doctype html>
+<meta charset="utf-8">
+<link rel="stylesheet" href="assets/css/paper.css">
+<div class="paper-with-toc">
+  <nav class="paper-toc" aria-label="Page contents">
+    <div class="paper-toc-title">Contents</div>
+    <ul class="paper-toc-list">
+      <li><a href="#abstract">Abstract</a></li>
+      <li><a href="#pipeline">Pipeline</a></li>
+      <li><a href="#demo">Demo</a></li>
+
+      <li><a href="#solo_to_solo">&emsp;Solo-to-Solo</a></li>
+
+      <li><a href="#interaction_to_interaction">&emsp;Interaction-to-Interaction</a></li>
+
+      <li><a href="#solo_to_interaction_to_solo">&emsp;Solo-to-Interaction-to-Solo</a></li>
+
+      <li><a href="#comparison_representations">&emsp;Comparison</a></li>
+
+      <li><a href="#limitations">&emsp;Limitations</a></li>
+
+    </ul>
+  </nav>
+  <article class="paper-page">
+  <header class="paper-header">
+    <h1 class="paper-title">ARMS</h1>
+    <p class="paper-subtitle">
+      <span style="color: #006BA7;">Anchor</span>–<span style="color: #98282C;">Relational</span> Motion Streaming for Seamless Solo-Social Motion Transitions
+    </p>
+    <div class="paper-authors" aria-label="Authors">
+      <a class="paper-author" href="https://hkliu.com/" target="_blank" rel="noopener noreferrer">Huakun Liu<sup>1</sup></a>
+      <a class="paper-author" href="https://yu1ut.com/" target="_blank" rel="noopener noreferrer">Qing Yu<sup>2</sup></a>
+      <a class="paper-author" href="https://kfworks.com/" target="_blank" rel="noopener noreferrer">Kent Fujiwara<sup>2</sup></a>
+      <span class="paper-author">Hideaki Uchiyama<sup>1</sup></span>
+      <span class="paper-author">Kiyoshi Kiyokawa<sup>1</sup></span>
+    </div>
+    <div class="paper-affiliations" aria-label="Affiliations">
+      <div><sup>1</sup>Nara Institute of Science and Technology, Ikoma, Japan</div>
+      <div><sup>2</sup>LY Corporation, Tokyo, Japan</div>
+    </div>
+    <nav class="paper-buttons">
+      <span class="paper-btn paper-btn--disabled">Paper</span>
+      <span class="paper-btn paper-btn--disabled">arXiv</span>
+      <a href="https://github.com/kk9six/arms" class="paper-btn" target="_blank" rel="noopener noreferrer">Code</a>
+    </nav>
+  </header>
+
+  <div class="paper-abstract" id="abstract">
+    <h2>Abstract</h2>
+    <div class="abstract-text"><p>Generating temporally continuous and socially coherent human motion from text remains a fundamental challenge, particularly in realistic streams where people act alone, enter interactions, and later disengage.
+Most existing methods generate fixed-length motion clips under static agent configurations, which makes them brittle to solo–social transitions and unsuitable for incremental generation over long horizons.
+We propose ARMS, an Anchor–Relational Motion Streaming framework that unifies solo motion and human–human interaction within a single causal generative process.
+ARMS introduces a dynamics-asymmetric representation that decouples per-person temporal evolution from inter-person alignment via a partner-referenced relative-translation term, enabling seamless switching of social coupling without sacrificing long-horizon stability or spatial consistency between agents.
+On top of a causal latent space, a causal relational diffusion model progressively refines motion segment-by-segment using only past context, capturing both intra-person temporal dependencies and inter-person relations.
+Mode-aware relational gating activates or masks cross-agent connections, so the same model supports both solo and interactive generation.
+Experiments show that ARMS improves transition smoothness and social coherence compared to interaction-centric baselines, while also achieving competitive results on human–human interaction benchmarks.</p>
+</div>
+  </div>
+
+  <div class="paper-pipeline" id="pipeline">
+    <h2 class="section-title">Pipeline</h2>
+    <div class="pipeline-figure-wrap">
+      <img src="assets/imgs/pipeline.png" alt="ARMS pipeline" class="pipeline-figure">
+      <p style="font-size: 0.9rem; color: #555;">We encode motion into causal latent streams for the Anchor and Relational agents, concatenate them, and apply symmetric segment-wise noising.
+  A text-conditioned Causal Relational Diffusion Transformer denoises the sequence using segment-wise causal attention and mode-aware relational gating masks, enabling cross-agent visibility for interaction and masking it for solo motion.</p>
+    </div>
+  </div>
+
+
+  <div class="paper-demo-top" id="demo">
+    <p style="margin: 0 auto 2rem; font-size: 1.2rem; text-align: center; max-width:800px">The following videos show the raw generated results and are rendered <b>without</b> post-processing, such as motion smoothing or foot-skating removal.</p>
+    <div class="demo-top-video-wrap">
+      <div class="video-clip-wrap">
+        <video class="demo-top-video" src="videos/demo.mp4" controls loop muted playsinline autoplay></video>
+      </div>
+
+      <p class="demo-top-caption"></p>
+
+    </div>
+  </div>
+
+
+
+
+  <section class="demo-section" id="solo_to_solo">
+    <h2 class="section-title">Solo-to-Solo</h2>
+
+      <div class="demo-grid demo-grid-3">
+
+          <div class="demo-cell">
+
+
+
+  <ul class="demo-prompts">
+
+    <li>A man walks forward through the streets flippantly.</li>
+
+    <li>A person raises their right hand then places it back down.</li>
+
+    <li>A person walks in reverse to avoid a crack in the sidewalk.</li>
+
+    <li>A person walks forward, picks up something.</li>
+
+  </ul>
+
+  <div class="video-clip-wrap">
+  <video class="demo-cell-video" src="videos/solo2solo/01.mp4" controls loop muted playsinline autoplay></video>
+</div>
+</div>
+
+
+          <div class="demo-cell">
+
+
+
+  <ul class="demo-prompts">
+
+    <li>A person who is standing with feet spread apart by his sides takes sideways to his right.</li>
+
+    <li>A person performs a forward cartwheel.</li>
+
+    <li>A person walks diagonally.</li>
+
+    <li>A person walks in a clockwise circle, with both arms at at his sides.</li>
+
+  </ul>
+
+  <div class="video-clip-wrap">
+  <video class="demo-cell-video" src="videos/solo2solo/02.mp4" controls loop muted playsinline autoplay></video>
+</div>
+</div>
+
+
+          <div class="demo-cell">
+
+
+
+  <ul class="demo-prompts">
+
+    <li>A person throws item with left hand then catches something with both hands</li>
+
+    <li>A person claps their hands.</li>
+
+    <li>A person raises their right arm and waves the hand.</li>
+
+    <li>Someone takes a step forward as if they were bumped from behind.</li>
+
+  </ul>
+
+  <div class="video-clip-wrap">
+  <video class="demo-cell-video" src="videos/solo2solo/03.mp4" controls loop muted playsinline autoplay></video>
+</div>
+</div>
+
+
+          <div class="demo-cell">
+
+
+
+  <ul class="demo-prompts">
+
+    <li>A person walks up to picks something up off the floor.</li>
+
+    <li>A person is walking in a counter counterclockwise circle.</li>
+
+    <li>A person walks forward in a near straight line.</li>
+
+    <li>A person balances on their right foot with their left leg stretched to the left.</li>
+
+  </ul>
+
+  <div class="video-clip-wrap">
+  <video class="demo-cell-video" src="videos/solo2solo/04.mp4" controls loop muted playsinline autoplay></video>
+</div>
+</div>
+
+
+          <div class="demo-cell">
+
+
+
+  <ul class="demo-prompts">
+
+    <li>Someone walk up to pick something up off the floor.</li>
+
+    <li>A person is walking in a counter counterclockwise circle.</li>
+
+    <li>A person walks forward in a near straight line.</li>
+
+    <li>A person balances on their right foot with their left leg stretched to the left.</li>
+
+  </ul>
+
+  <div class="video-clip-wrap">
+  <video class="demo-cell-video" src="videos/solo2solo/05.mp4" controls loop muted playsinline autoplay></video>
+</div>
+</div>
+
+
+          <div class="demo-cell">
+
+
+
+  <ul class="demo-prompts">
+
+    <li>A person jumps in place then raises hands above head then repeats it</li>
+
+    <li>A person walks in a circle to their right.</li>
+
+    <li>A person raises their hand and then lowers it.</li>
+
+    <li>A person raises their arm and then places it back down.</li>
+
+  </ul>
+
+  <div class="video-clip-wrap">
+  <video class="demo-cell-video" src="videos/solo2solo/06.mp4" controls loop muted playsinline autoplay></video>
+</div>
+</div>
+
+
+      </div>
+
+
+  </section>
+
+  <section class="demo-section" id="interaction_to_interaction">
+    <h2 class="section-title">Interaction-to-Interaction</h2>
+
+      <div class="demo-grid demo-grid-3">
+
+          <div class="demo-cell">
+
+
+
+  <ul class="demo-prompts">
+
+    <li>These two face each other, and then bow with respect.</li>
+
+    <li>The other person aims a couple of punches, who steps back to avoid them.</li>
+
+    <li>Two people are shoving each other.</li>
+
+    <li>One person is presenting products to the other person.</li>
+
+  </ul>
+
+  <div class="video-clip-wrap">
+  <video class="demo-cell-video" src="videos/interaction2interaction/01.mp4" controls loop muted playsinline autoplay></video>
+</div>
+</div>
+
+
+          <div class="demo-cell">
+
+
+
+  <ul class="demo-prompts">
+
+    <li>One person attacks the first one by lifting their left leg and right leg alternatively.</li>
+
+    <li>One lifts their right leg to strike. They pause and show mutual respect by bowing to each other.</li>
+
+    <li>The other person raises both hands above their head, lifts their right leg and moves around the first person while stretching their arms upward and then outward in a counterclockwise direction.</li>
+
+    <li>The first person holds an item with both hands in front of him, while the second hits it with their left knee.</li>
+
+  </ul>
+
+  <div class="video-clip-wrap">
+  <video class="demo-cell-video" src="videos/interaction2interaction/02.mp4" controls loop muted playsinline autoplay></video>
+</div>
+</div>
+
+
+          <div class="demo-cell">
+
+
+
+  <ul class="demo-prompts">
+
+    <li>Both they grasp hands and twirl in a circle.</li>
+
+    <li>Both people move forward together in unison.</li>
+
+    <li>The first person swings the left hand in front of the chest, then rotates it around and drops it straight down together with the right hand that was raised at the same time. The second raises hands to the waist then pulling it downwards.</li>
+
+    <li>One lifts the right leg to launch an attack, and the other person raises one leg to defend.</li>
+
+  </ul>
+
+  <div class="video-clip-wrap">
+  <video class="demo-cell-video" src="videos/interaction2interaction/03.mp4" controls loop muted playsinline autoplay></video>
+</div>
+</div>
+
+
+          <div class="demo-cell">
+
+
+
+  <ul class="demo-prompts">
+
+    <li>These two are practicing fencing, and one person scores a hit on the other person's chest with the sword.</li>
+
+    <li>Two persons are dancing with each other.</li>
+
+    <li>One person advances to strike the other person.</li>
+
+    <li>They stroll in the same direction by maintaining side-by-side positions.</li>
+
+  </ul>
+
+  <div class="video-clip-wrap">
+  <video class="demo-cell-video" src="videos/interaction2interaction/04.mp4" controls loop muted playsinline autoplay></video>
+</div>
+</div>
+
+
+          <div class="demo-cell">
+
+
+
+  <ul class="demo-prompts">
+
+    <li>These two raise their right legs in preparation for an attack.</li>
+
+    <li>They spin towards each other.</li>
+
+    <li>One shoves both hands on the other's shoulders while the other continuously moves the arms sideways.</li>
+
+    <li>One person grasps the other person's right hand with his left hand.</li>
+
+  </ul>
+
+  <div class="video-clip-wrap">
+  <video class="demo-cell-video" src="videos/interaction2interaction/05.mp4" controls loop muted playsinline autoplay></video>
+</div>
+</div>
+
+
+          <div class="demo-cell">
+
+
+
+  <ul class="demo-prompts">
+
+    <li>These two people lower their arms, then the first person pivots, facing forward and walks away.</li>
+
+    <li>Two humans are engaging in a practice session of fencing.</li>
+
+    <li>Two individuals sitting on chairs.</li>
+
+    <li>The first one lifts their right leg to strike the second one.</li>
+
+  </ul>
+
+  <div class="video-clip-wrap">
+  <video class="demo-cell-video" src="videos/interaction2interaction/06.mp4" controls loop muted playsinline autoplay></video>
+</div>
+</div>
+
+
+      </div>
+
+
+  </section>
+
+  <section class="demo-section" id="solo_to_interaction_to_solo">
+    <h2 class="section-title">Solo-to-Interaction-to-Solo</h2>
+
+      <div class="demo-grid demo-grid-2">
+
+          <div class="demo-cell">
+
+
+
+  <!-- <p style="font-size: 0.9rem; color: #555; text-align: left; margin: 0;">Solo:</p> -->
+  <ul class="demo-prompts">
+
+    <li style="color: #006BA7;">A person walks while leaning on a rail.</li>
+
+    <li style="color: #006BA7;">The person is doing a light hop.</li>
+
+  </ul>
+  <hr class="demo-prompts-divider">
+  <!-- <p style="font-size: 0.9rem; color: #555; text-align: left; margin: 0;">Interaction:</p> -->
+  <ul class="demo-prompts">
+
+    <li>One person prevents the other person from waving.</li>
+
+    <li>These two people lower their arms, swap locations and unfold their arms.</li>
+
+  </ul>
+  <hr class="demo-prompts-divider">
+  <!-- <p style="font-size: 0.9rem; color: #555; text-align: left; margin: 0;">Solo:</p> -->
+  <ul class="demo-prompts">
+
+    <li style="color: #006BA7;">A person walks in a half circle towards the right</li>
+
+    <li style="color: #006BA7;">A person does circular motion with right hand stomach height</li>
+
+  </ul>
+  <hr class="demo-prompts-divider-solo">
+  <ul class="demo-prompts">
+
+    <li style="color: #98282C;">The person slide right his left foot.</li>
+
+    <li style="color: #98282C;">A person stands stills and uses his left arm as if to clean a counter.</li>
+
+  </ul>
+
+  <div class="video-clip-wrap">
+  <video class="demo-cell-video" src="videos/solo_interaction_solo/01.mp4" controls loop muted playsinline autoplay></video>
+</div>
+</div>
+
+
+          <div class="demo-cell">
+
+
+
+  <!-- <p style="font-size: 0.9rem; color: #555; text-align: left; margin: 0;">Solo:</p> -->
+  <ul class="demo-prompts">
+
+    <li style="color: #006BA7;">A person with their hand to their head look around then walks backwards</li>
+
+    <li style="color: #006BA7;">The person bends down and picks up an object from the ground.</li>
+
+  </ul>
+  <hr class="demo-prompts-divider">
+  <!-- <p style="font-size: 0.9rem; color: #555; text-align: left; margin: 0;">Interaction:</p> -->
+  <ul class="demo-prompts">
+
+    <li>The two people take a step forward with their right foot.</li>
+
+    <li>The first one inspects an item held in the right hand, then the second one seizes the item and raises it above their head using the right hand. the first one continuously jumps to retrieve the item, and the second one also jumps to prevent the item being taken away.</li>
+
+  </ul>
+  <hr class="demo-prompts-divider">
+  <!-- <p style="font-size: 0.9rem; color: #555; text-align: left; margin: 0;">Solo:</p> -->
+  <ul class="demo-prompts">
+
+    <li style="color: #006BA7;">A person is walking forward and then swiftly turns left and starts walking sideways.</li>
+
+    <li style="color: #006BA7;">Both feet at the same to jump to the right.</li>
+
+  </ul>
+  <hr class="demo-prompts-divider-solo">
+  <ul class="demo-prompts">
+
+    <li style="color: #98282C;">A person walks slowly forward placing one foot in front of the other whilst raising both arms straight up and then back down.</li>
+
+    <li style="color: #98282C;">A person walks right diagonally, turns left walks a few steps then walks back and stands facing forward.</li>
+
+  </ul>
+
+  <div class="video-clip-wrap">
+  <video class="demo-cell-video" src="videos/solo_interaction_solo/02.mp4" controls loop muted playsinline autoplay></video>
+</div>
+</div>
+
+
+          <div class="demo-cell">
+
+
+
+  <!-- <p style="font-size: 0.9rem; color: #555; text-align: left; margin: 0;">Solo:</p> -->
+  <ul class="demo-prompts">
+
+    <li style="color: #006BA7;">A person raised the both hands and show some gestures</li>
+
+    <li style="color: #006BA7;">A person is walking in a counterclockwise circle.</li>
+
+  </ul>
+  <hr class="demo-prompts-divider">
+  <!-- <p style="font-size: 0.9rem; color: #555; text-align: left; margin: 0;">Interaction:</p> -->
+  <ul class="demo-prompts">
+
+    <li>The first person presses one of the second's hands with their left hand, then they both move apart from each other.</li>
+
+    <li>The first one tilts the body to the left and brings the left arm back, then extends the left arm to the left and slides from left to right. the other person retracts the right arm, then extends the left arm to the right and slides from right to left.</li>
+
+  </ul>
+  <hr class="demo-prompts-divider">
+  <!-- <p style="font-size: 0.9rem; color: #555; text-align: left; margin: 0;">Solo:</p> -->
+  <ul class="demo-prompts">
+
+    <li style="color: #006BA7;">A person stumbles forward a few steps.</li>
+
+    <li style="color: #006BA7;">A man walks forward and then backwards.</li>
+
+  </ul>
+  <hr class="demo-prompts-divider-solo">
+  <ul class="demo-prompts">
+
+    <li style="color: #98282C;">A person walks forward slowly.</li>
+
+    <li style="color: #98282C;">A person puts their hands together and swings them.</li>
+
+  </ul>
+
+  <div class="video-clip-wrap">
+  <video class="demo-cell-video" src="videos/solo_interaction_solo/03.mp4" controls loop muted playsinline autoplay></video>
+</div>
+</div>
+
+
+          <div class="demo-cell">
+
+
+
+  <!-- <p style="font-size: 0.9rem; color: #555; text-align: left; margin: 0;">Solo:</p> -->
+  <ul class="demo-prompts">
+
+    <li style="color: #006BA7;">The first one was walking forward and stepped over some thing.</li>
+
+    <li style="color: #006BA7;">The person walks forward and then waits while its arms waves.</li>
+
+  </ul>
+  <hr class="demo-prompts-divider">
+  <!-- <p style="font-size: 0.9rem; color: #555; text-align: left; margin: 0;">Interaction:</p> -->
+  <ul class="demo-prompts">
+
+    <li>One person extends the left leg and launches an attack, and the other pulls back their right leg to avoid the attack.</li>
+
+    <li>The two move to the right side.</li>
+
+  </ul>
+  <hr class="demo-prompts-divider">
+  <!-- <p style="font-size: 0.9rem; color: #555; text-align: left; margin: 0;">Solo:</p> -->
+  <ul class="demo-prompts">
+
+    <li style="color: #006BA7;">The person is walking.</li>
+
+    <li style="color: #006BA7;">A person is jumping jacks in place.</li>
+
+  </ul>
+  <hr class="demo-prompts-divider-solo">
+  <ul class="demo-prompts">
+
+    <li style="color: #98282C;">The man is walking fast</li>
+
+    <li style="color: #98282C;">A person hops on one leg to the right with their left leg trailing behind them.</li>
+
+  </ul>
+
+  <div class="video-clip-wrap">
+  <video class="demo-cell-video" src="videos/solo_interaction_solo/04.mp4" controls loop muted playsinline autoplay></video>
+</div>
+</div>
+
+
+          <div class="demo-cell">
+
+
+
+  <!-- <p style="font-size: 0.9rem; color: #555; text-align: left; margin: 0;">Solo:</p> -->
+  <ul class="demo-prompts">
+
+    <li style="color: #006BA7;">A person shuffels to the right, right foot behind left then back to center.</li>
+
+    <li style="color: #006BA7;">Someone nervously pacing around in a circle</li>
+
+  </ul>
+  <hr class="demo-prompts-divider">
+  <!-- <p style="font-size: 0.9rem; color: #555; text-align: left; margin: 0;">Interaction:</p> -->
+  <ul class="demo-prompts">
+
+    <li>One person respectfully hands over something to the other person and exits.</li>
+
+    <li>The first person rotates body and lifts the right leg in a assaulting motion towards the second.</li>
+
+  </ul>
+  <hr class="demo-prompts-divider">
+  <!-- <p style="font-size: 0.9rem; color: #555; text-align: left; margin: 0;">Solo:</p> -->
+  <ul class="demo-prompts">
+
+    <li style="color: #006BA7;">Starting with his left foot, a person ambles forward.</li>
+
+    <li style="color: #006BA7;">A person raises left arm to shoulder height then drops to side.</li>
+
+  </ul>
+  <hr class="demo-prompts-divider-solo">
+  <ul class="demo-prompts">
+
+    <li style="color: #98282C;">A person is walking in a counter counterclockwise circle.</li>
+
+    <li style="color: #98282C;">A person is walking, then turns right.</li>
+
+  </ul>
+
+  <div class="video-clip-wrap">
+  <video class="demo-cell-video" src="videos/solo_interaction_solo/05.mp4" controls loop muted playsinline autoplay></video>
+</div>
+</div>
+
+
+          <div class="demo-cell">
+
+
+
+  <!-- <p style="font-size: 0.9rem; color: #555; text-align: left; margin: 0;">Solo:</p> -->
+  <ul class="demo-prompts">
+
+    <li style="color: #006BA7;">A person puts down a box to walk forward.</li>
+
+    <li style="color: #006BA7;">A man walks and then starts running.</li>
+
+  </ul>
+  <hr class="demo-prompts-divider">
+  <!-- <p style="font-size: 0.9rem; color: #555; text-align: left; margin: 0;">Interaction:</p> -->
+  <ul class="demo-prompts">
+
+    <li>one person holds the other's hand, leading them to move forward.</li>
+
+    <li>The person lifts their right arm and points to the sky with their left hand.</li>
+
+  </ul>
+  <hr class="demo-prompts-divider">
+  <!-- <p style="font-size: 0.9rem; color: #555; text-align: left; margin: 0;">Solo:</p> -->
+  <ul class="demo-prompts">
+
+    <li style="color: #006BA7;">A person lowers their arms then moves them side to side and lowers them.</li>
+
+    <li style="color: #006BA7;">A person walks casually up to a point.</li>
+
+  </ul>
+  <hr class="demo-prompts-divider-solo">
+  <ul class="demo-prompts">
+
+    <li style="color: #98282C;">Starting from the bottom left, a person walks a lazy almost full circle.</li>
+
+    <li style="color: #98282C;">A person is lifting the right leg.</li>
+
+  </ul>
+
+  <div class="video-clip-wrap">
+  <video class="demo-cell-video" src="videos/solo_interaction_solo/06.mp4" controls loop muted playsinline autoplay></video>
+</div>
+</div>
+
+
+      </div>
+
+
+  </section>
+
+  <section class="demo-section" id="comparison_representations">
+    <h2 class="section-title">Comparison</h2>
+
+      <div class="demo-grid demo-grid-4">
+
+          <div class="demo-cell">
+
+  <h3 class="demo-cell-label">Non-canonical representation <span style='color: #979797; font-size: 0.8rem;'>[1]</span></h3>
+
+
+  <p class="demo-cell-description">Motion is generated in global coordinates, which preserves spatial coupling but restricts motion to coordinate patterns observed during training. As a result, incremental generation after prompt transitions often shows weaker text alignment.</p>
+
+
+  <ul class="demo-prompts">
+
+    <li>One person lifts the right leg to strike, and the other swiftly raises the right leg in retaliation.</li>
+
+    <li>One person strikes a pose while the other person kneels to take photographs.</li>
+
+    <li>One person launches a punch towards the other with the right arm, then pivots and kicks with the right leg at the other.</li>
+
+  </ul>
+
+  <div class="video-clip-wrap">
+  <video class="demo-cell-video" src="videos/comparison/noncanonical.mp4" controls loop muted playsinline autoplay></video>
+</div>
+</div>
+
+
+          <div class="demo-cell">
+
+  <h3 class="demo-cell-label">Canonical representation<br><span style='color: #979797; font-size: 0.8rem;'>[2, 3]</span></h3>
+
+
+  <p class="demo-cell-description">Each person is modeled in a root-centered coordinate system using velocities and local joint features, which enables smooth and stable individual motion. Interaction is introduced only through an initial relative transformation, which can lead to drifting spatial relations over long sequences.</p>
+
+
+  <ul class="demo-prompts">
+
+    <li>One person lifts the right leg to strike, and the other swiftly raises the right leg in retaliation.</li>
+
+    <li>One person strikes a pose while the other person kneels to take photographs.</li>
+
+    <li>One person launches a punch towards the other with the right arm, then pivots and kicks with the right leg at the other.</li>
+
+  </ul>
+
+  <div class="video-clip-wrap">
+  <video class="demo-cell-video" src="videos/comparison/canonical.mp4" controls loop muted playsinline autoplay></video>
+</div>
+</div>
+
+
+          <div class="demo-cell">
+
+  <h3 class="demo-cell-label">InterMask <span style='color: #979797; font-size: 0.8rem;'>[4]</span></h3>
+
+
+  <p class="demo-cell-description">Interaction is generated through masked inpainting conditioned on the entire motion window. This allows coherent short sequences but requires generating the full motion at once and does not support incremental streaming generation.</p>
+
+
+  <ul class="demo-prompts">
+
+    <li>One person lifts the right leg to strike, and the other swiftly raises the right leg in retaliation.</li>
+
+    <li>One person strikes a pose while the other person kneels to take photographs.</li>
+
+    <li>One person launches a punch towards the other with the right arm, then pivots and kicks with the right leg at the other.</li>
+
+  </ul>
+
+  <div class="video-clip-wrap">
+  <video class="demo-cell-video" src="videos/comparison/intermask.mp4" controls loop muted playsinline autoplay></video>
+</div>
+</div>
+
+
+          <div class="demo-cell">
+
+  <h3 class="demo-cell-label">Ours</h3>
+
+
+  <p class="demo-cell-description">We model per-person motion in canonical coordinates while explicitly encoding per-frame relational displacement between agents. This preserves interaction geometry and enables temporally extensible streaming generation, though minor foot sliding may still occur.</p>
+
+
+  <ul class="demo-prompts">
+
+    <li>One person lifts the right leg to strike, and the other swiftly raises the right leg in retaliation.</li>
+
+    <li>One person strikes a pose while the other person kneels to take photographs.</li>
+
+    <li>One person launches a punch towards the other with the right arm, then pivots and kicks with the right leg at the other.</li>
+
+  </ul>
+
+  <div class="video-clip-wrap">
+  <video class="demo-cell-video" src="videos/comparison/ours.mp4" controls loop muted playsinline autoplay></video>
+</div>
+</div>
+
+
+      </div>
+
+
+    <div class="section-references">
+      <p>[1] Liang, H., Zhang, W., Li, W., Yu, J., Xu, L.: Intergen:Diffusion-basedmulti-human motion generation under complex interactions. International Journal of Computer Vision 132(9), 3463–3483 (2024)</p>
+      <p>[2] Shafir, Y., Tevet, G., Kapon, R., Bermano, A.H.: Human motion diffusion as a generative prior. In: The Twelfth International Conference on Learning Representations (2024)</p>
+      <p>[3] Yu, H., Zhang, J., Chen, C., Xiang, T., Fang, Y., Niebles, J.C., Adeli, E.: Socialgen: Modeling multi-human social interaction with language models. In: Thirteenth International Conference on 3D Vision (2025)</p>
+      <p>[4] Javed, M.G., Li, X., et al.: Intermask: 3d human interaction generation via collaborative masked modeling. In: The Thirteenth International Conference on Learning Representations (2025)</p>
+    </div>
+
+  </section>
+
+  <section class="demo-section" id="limitations">
+    <h2 class="section-title">Limitations</h2>
+
+      <div class="demo-grid demo-grid-2">
+
+          <div class="demo-cell">
+
+  <h3 class="demo-cell-label">Our method suffers from typical interaction generation issues such as body penetration between individuals.</h3>
+
+
+
+  <ul class="demo-prompts">
+
+    <li>One person leans back and takes three steps back before spreading both arms to keep balance.</li>
+
+    <li>One person lifts the right leg in preparation to strike, while the other readies for defense by raising the left leg.</li>
+
+    <li>One person runs towards the other person and takes their hands, and then releases them forcefully.</li>
+
+    <li>One person takes a step forward with the left foot. The other raises their head, takes a step forward with the left foot, followed by a small step with the right foot while swinging the arms slightly back and forth.</li>
+
+  </ul>
+
+  <div class="video-clip-wrap">
+  <video class="demo-cell-video" src="videos/limitations/01.mp4" controls loop muted playsinline autoplay></video>
+</div>
+</div>
+
+
+          <div class="demo-cell">
+
+  <h3 class="demo-cell-label">Our method does not explicitly condition on surrounding agents or context during solo motion generation.</h3>
+
+
+
+  <ul class="demo-prompts">
+
+    <li><span style='color: #006BA7;'>A person walks forwards and swings their arms up.</span></li>
+
+    <li><span style='color: #006BA7;'>A person walks forward and turns to their right.</span></li>
+
+    <li>Two performers are playing rock, paper, scissors game.</li>
+
+    <li>One greets the other by raising hand and share a joyful handshake.</li>
+
+    <li><span style='color: #006BA7;'>A person walks in a counter counterclockwise circle</span></li>
+
+    <li><span style='color: #98282C;'>A person hops on right foot.</span></li>
+
+  </ul>
+
+  <div class="video-clip-wrap">
+  <video class="demo-cell-video" src="videos/limitations/02.mp4" controls loop muted playsinline autoplay></video>
+</div>
+</div>
+
+
+      </div>
+
+
+  </section>
+
+  </article>
+</div>
