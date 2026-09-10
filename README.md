@@ -377,6 +377,11 @@ This repository contains ARMS code only.
 Datasets, SMPL-family body models, and evaluator checkpoints have their own licenses and access terms and must be obtained from their respective sources.
 Downloading or using the ARMS code does not grant rights to those external assets.
 
+## Acknowledgments
+
+Components in this code are derived from the following open-source efforts: [CMDM](https://github.com/YU1ut/CMDM), [InterGen](https://github.com/tr3e/InterGen), [Inter-X](https://github.com/liangxuy/Inter-X), [MotionStreamer](https://github.com/zju3dv/MotionStreamer), and [InterMask](https://github.com/gohar-malik/InterMask) projects.
+
+We thank their authors for making their work available.
 
 ## Citation
 If you find this code useful in your research, please cite:
