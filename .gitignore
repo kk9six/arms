@@ -38,3 +38,4 @@ evaluation.sh
 notebook.py
 
 !checkpoints/.gitkeep
+!checkpoints/README.md

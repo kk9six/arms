@@ -173,6 +173,12 @@ The current HumanML3D and InterHuman dataloaders read the canonical `motion_proc
 
 ## Train models
 
+> We provide the checkpoints. Download the released checkpoints into the directory layout expected by the training and evaluation configurations:
+>
+> ```bash
+> uv run hf download kksix/arms --local-dir checkpoints
+> ```
+
 Training is performed in two stages: train the motion VAE first, then train the DiT with that VAE frozen.
 
 The trainers start a Weights & Biases run when `log_level=INFO`; either log in first with `uv run wandb login` or run offline with:
@@ -365,6 +371,12 @@ uv run python -m demo.single_to_double export_video=true
 ```
 
 > Open3D is needed for visualization.
+
+## Data, models, and redistribution
+This repository contains ARMS code only.
+Datasets, SMPL-family body models, and evaluator checkpoints have their own licenses and access terms and must be obtained from their respective sources.
+Downloading or using the ARMS code does not grant rights to those external assets.
+
 
 ## Citation
 If you find this code useful in your research, please cite:
