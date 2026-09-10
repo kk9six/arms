@@ -11,8 +11,6 @@ wheels/
 .venv
 .codex
 .agents
-checkpoints/*
-!checkpoints/.gitkeep
 
 trash/
 *.mp4
@@ -38,3 +36,5 @@ wandb/**
 
 evaluation.sh
 notebook.py
+
+!checkpoints/.gitkeep
