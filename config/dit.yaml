@@ -1,0 +1,28 @@
+trainer:
+  dataset_module: InterHumanT2M
+  batch_size: 64
+  max_epoch: 500
+  lr: 2e-4
+  gamma: 0.1
+  weight_decay: 1e-5
+  grad_clip: 1.0
+  cond_drop_prob: 0.1
+  forward_function: unified_dataset
+  symmetric_t: True
+  random_rotate: False
+  max_length: 300
+  ema_decay: 0.9999
+  backup_epoch:
+  - 250
+
+model:
+  vae:
+    scale_latent: False
+  dit:
+    name: dit
+    num_frame_per_block: 0
+    cond_mode: text
+    layer: 8
+    clip_noise: 20.0
+    max_length: 75
+    input_dim: 64

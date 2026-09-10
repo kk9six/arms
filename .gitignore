@@ -9,6 +9,10 @@ wheels/
 
 # Virtual environments
 .venv
+.codex
+.agents
+checkpoints/*
+!checkpoints/.gitkeep
 
 trash/
 *.mp4
@@ -28,6 +32,7 @@ sentencet5-xxl/
 Experiments/**
 experiments/**
 checkpoints/**
+evaluation_results/
 
 wandb/**
 

@@ -1,0 +1,44 @@
+seed: 42
+trainer:
+  dataset_module: InterHumanM2M
+  batch_size: 256
+  window_size: 64
+  window_stride: 1
+  max_epoch: 50
+  lr: 2e-4
+  gamma: 0.1
+  weight_decay: 0.0
+  grad_clip: 1.0
+  ema_decay: 0
+  backup_epoch: []
+  random_rotate: False
+  loss:
+    kv:
+      latent: 1.0
+      root: 7.0
+      kl: 1.0
+    root_dim: 6
+    position_dim: 64
+    mean_loss: False
+model:
+  vae:
+    name: vae
+    path: ${exp_root_dir}
+    feature_type: velocity_relative_translation
+    input_width: 266
+    latent_dim: 64
+    hidden_size: 1024
+    down_t: 2
+    stride_t: 2
+    width: 1024
+    depth: 3
+    dilation_growth_rate: 3
+    activation: relu
+    norm: None
+    clip_range: [-30, 20]
+    mean_fpath: ${data_root_dir}/mean_std/mean_with-shape.npy
+    std_fpath: ${data_root_dir}/mean_std/std_with-shape.npy
+    latent_mean_fpath: ${.path}/model/mean.npy
+    latent_std_fpath: ${.path}/model/std.npy
+    scale_latent: False
+    split_features: False

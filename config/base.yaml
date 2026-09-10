@@ -1,0 +1,22 @@
+project_name: ???
+exp_name: ???
+data_root_dir: dataset
+checkpoint_root_dir: checkpoints
+evaluation_result_root_dir: evaluation_results
+exp_root_dir: ${checkpoint_root_dir}/${exp_name}
+save_model_dir: ${exp_root_dir}/model
+eval_dir: ${evaluation_result_root_dir}/${exp_name}
+demo_dir: ${exp_root_dir}/demo
+smpl_model_fpath: ${data_root_dir}/smpl/smpl/neutral/model.npz
+smplh_model_fpath: ${data_root_dir}/smpl/smplh/neutral/model.npz
+smplx_model_fpath: ${data_root_dir}/smpl/smplx/neutral/model.npz
+num_gpus: 1
+target_framerate: 30
+seed: 3407
+log_file: run.log
+log_level: INFO
+trainer:
+  num_workers: 16
+  persistent_workers: True
+  prefetch_factor: 16
+  pin_memory: True

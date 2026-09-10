@@ -1,0 +1,16 @@
+eval:
+  dataset_module: InterXT2MNative
+  mm_num_samples: 0 # 100
+  mm_num_repeats: 30
+  mm_num_times: 10
+  diversity_times: 300
+  replication_times: 20 # 20
+  batch_size: 32
+  cond_scale: 2.5
+  history_length: 2
+  sampling_timesteps: 50
+  uncertainty_scale: 5.0
+  scheduling_matrix_type: pyramid
+  infer_from_velocity: False
+  emb_scale: 1.0
+  divide_by: 1.0
